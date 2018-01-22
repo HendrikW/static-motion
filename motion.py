@@ -81,6 +81,12 @@ class Notion:
         else:
             self.driver.get("https://notion.so" + url)
         time.sleep(wait)
+        # navigates first level into toggle blocks.
+        driver.execute_script("document.querySelectorAll(\"[data-block-id]\").forEach(function(e) { if (!e.querySelector(\"[data-block-id]\")) { if (e.querySelector(\".notion-button\")) { e.querySelector(\".notion-button\").click(); } } })")
+        time.sleep(wait)
+        # navigates second level into toggle blocks.
+        driver.execute_script("document.querySelectorAll(\"[data-block-id]\").forEach(function(e) { if (!e.querySelector(\"[data-block-id]\")) { if (e.querySelector(\".notion-button\")) { e.querySelector(\".notion-button\").click(); } } })")
+        time.sleep(wait)
         self.dom = BeautifulSoup(driver.page_source, "html.parser")
         self.source = self.driver.page_source.replace('</span>', '</span>!(notion)!')
         self.wait_spinner()
