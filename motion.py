@@ -134,6 +134,7 @@ class Notion:
             self.remove_scripts()
             self.iframe()
             self.div()
+            self.add_toggle_script()
             self.disqus()
             self.gen_html()
         except Exception as e:
@@ -155,6 +156,36 @@ class Notion:
         md(local_filename)
         with open(local_filename, "w") as f:
             f.write(self.html)
+
+    def add_toggle_script(self):
+        jquery = self.dom.new_tag("script", src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+        self.dom.find('body').append(jquery)
+        script = self.dom.new_tag("script")
+        script.string = """
+        jQuery('[data-block-id]:has([placeholder=Toggle]) .notion-button').on('click', function(e) {
+            jQuery(e.target).closest('[data-block-id]').find('.content-block').toggle();
+            if (jQuery(e.target).closest('[data-block-id]').find('.content-block').is(':visible')) {
+              rotateString = 'rotateZ(180deg)'
+            } else {
+              rotateString = 'rotateZ(90deg)'
+            }
+            jQuery(e.target).closest('[data-block-id]').find('svg:first').css({
+                'transform': rotateString
+            });
+        })
+        jQuery('[data-block-id]:has([placeholder=Toggle]) .notion-button').each(function(e) {
+            jQuery(this).closest('[data-block-id]').find('.content-block').toggle();
+            if (jQuery(this).closest('[data-block-id]').find('.content-block').is(':visible')) {
+              rotateString = 'rotateZ(180deg)'
+            } else {
+              rotateString = 'rotateZ(90deg)'
+            }
+            jQuery(this).closest('[data-block-id]').find('svg').css({
+                'transform': rotateString
+            });
+        })
+        """
+        self.dom.find('body').append(script)
 
     def gen_html(self):
         s = str(self.dom)
