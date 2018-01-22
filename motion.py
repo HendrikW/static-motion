@@ -28,7 +28,7 @@ def motion(is_mobile=False):
         print("Building mobile version...")
         chrome_options.add_argument('--user-agent=' + user_agent)
     driver = webdriver.Chrome(chrome_options=chrome_options)
-    n = Notion(options['index'], driver, options=options, is_index=True, is_mobile=is_mobile)
+    n = Notion(options['index'], driver, options=options, is_index=True, is_mobile=is_mobile, wait=3)
     n.mod()
     print("Index page looks good.")
     n.walk()
