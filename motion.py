@@ -70,7 +70,7 @@ def md(local_filename):
 
 
 class Notion:
-    def __init__(self, url, driver, options=None, is_index=False, wait=0, is_mobile=False):
+    def __init__(self, url, driver, options=None, is_index=False, wait=3, is_mobile=False):
         self.driver = driver
         print("Visiting " + url)
         self.is_index = is_index
