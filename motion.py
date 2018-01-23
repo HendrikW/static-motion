@@ -135,6 +135,7 @@ class Notion:
             self.iframe()
             self.div()
             self.add_toggle_script()
+            self.modify_for_mobile_display()
             self.disqus()
             self.gen_html()
         except Exception as e:
@@ -186,6 +187,18 @@ class Notion:
         })
         """
         self.dom.find('body').append(script)
+
+    # note: has to run after injection of jQuery.
+    def modify_for_mobile_display(self):
+        script = self.dom.new_tag("script")
+        script.string = """
+        jQuery(function() {
+          document.getElementsByClassName('notion-frame')[0].style.minWidth = '800px';
+        });
+        """
+        self.dom.find('body').append(script)
+        for meta_tag in self.dom.select('[name=apple-itunes-app]'):
+            meta_tag.decompose()
 
     def gen_html(self):
         s = str(self.dom)
